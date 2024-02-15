@@ -1,7 +1,26 @@
-# This is a basic workflow to help you get started with Actions
-              
-- name: Vib Action
+name: 'Vib Action'
+description: 'Build Vib Image'
+author: 'Vanilla OS Team'
+branding:
+  icon: 'arrow-up'
+  color: 'yellow'
+inputs:
+  recipe:
+    description: 'Path to recipe.yml'
+    required: true
+    default: 'recipe.yml'
+  plugins:
+    description: 'List of plugins to use'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Vib
+      shell: bash
+      run: |
+        bash ${{ github.action_path }}/setup.sh ${{ inputs.plugins }}
 
-
-              
-  uses: Vanilla-OS/vib-gh-action@v0.3.3-1
+    - name: Run Vib
+      shell: bash
+      run: ./vib build ${{ inputs.recipe }}
