@@ -1,26 +1,20 @@
-name: 'Vib Action'
-description: 'Build Vib Image'
-author: 'Vanilla OS Team'
-branding:
-  icon: 'arrow-up'
-  color: 'yellow'
-inputs:
-  recipe:
-    description: 'Path to recipe.yml'
-    required: true
-    default: 'recipe.yml'
-  plugins:
-    description: 'List of plugins to use'
-    required: false
-    default: ''
-runs:
-  using: 'composite'
-  steps:
-    - name: Setup Vib
-      shell: bash
-      run: |
-        bash ${{ github.action_path }}/setup.sh ${{ inputs.plugins }}
+name: Vib Build
 
-    - name: Run Vib
-      shell: bash
-      run: ./vib build ${{ inputs.recipe }}
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: vanilla-os/vib-gh-action@v0.3.3-1
+        with:
+          recipe: "vib.yaml"
+
+      - name: Build the Docker image
+        run: docker image build -f Containerfile --tag ghcr.io/your_org/your_image:main .
