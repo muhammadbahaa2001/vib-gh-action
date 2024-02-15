@@ -1,0 +1,7 @@
+# This is a basic workflow to help you get started with Actions
+              
+- name: Vib Action
+
+
+              
+  uses: Vanilla-OS/vib-gh-action@v0.3.3-1
